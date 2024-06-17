@@ -1,9 +1,9 @@
-const { merge } = require("webpack-merge");
-const common = require("./webpack.config");
+const { merge } = require('webpack-merge');
+const common = require('./webpack.config');
 
 module.exports = merge(common, {
-  mode: "production",
+  mode: 'production',
   output: {
-    filename: "bundle.[hash].js",
-  },
+    filename: 'bundle.[hash].js'
+  }
 });

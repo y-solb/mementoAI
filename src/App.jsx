@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import { DragDropContext } from 'react-beautiful-dnd';
-import StrictModeDroppable from './components/StrictModeDroppable.jsx';
+import Column from './components/Column.jsx';
 
 function App() {
   const getItems = (count) =>
@@ -33,7 +33,7 @@ function App() {
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      <StrictModeDroppable items={items} />
+      <Column items={items} />
     </DragDropContext>
   );
 }

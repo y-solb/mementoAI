@@ -1,24 +1,9 @@
-import { useState, useEffect } from 'react';
-import { Droppable, Draggable } from 'react-beautiful-dnd';
+import { Draggable } from 'react-beautiful-dnd';
+import StrictDroppable from './StrictDroppable.jsx';
 
-const StrictModeDroppable = ({ items }) => {
-  const [enabled, setEnabled] = useState(false);
-
-  useEffect(() => {
-    const animation = requestAnimationFrame(() => setEnabled(true));
-
-    return () => {
-      cancelAnimationFrame(animation);
-      setEnabled(false);
-    };
-  }, []);
-
-  if (!enabled) {
-    return null;
-  }
-
+const Column = ({ items }) => {
   return (
-    <Droppable droppableId="droppable">
+    <StrictDroppable droppableId="droppable">
       {(provided, snapshot) => (
         <div
           {...provided.droppableProps}
@@ -40,7 +25,7 @@ const StrictModeDroppable = ({ items }) => {
           {provided.placeholder}
         </div>
       )}
-    </Droppable>
+    </StrictDroppable>
   );
 };
 
@@ -60,4 +45,4 @@ const getListStyle = (isDraggingOver) => ({
   width: 250
 });
 
-export default StrictModeDroppable;
+export default Column;

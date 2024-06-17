@@ -1,9 +1,9 @@
 import { Draggable } from 'react-beautiful-dnd';
 import StrictDroppable from './StrictDroppable';
 
-const Column = ({ items }) => {
+const Column = ({ columnId, items }) => {
   return (
-    <StrictDroppable droppableId="droppable">
+    <StrictDroppable droppableId={columnId}>
       {(provided, snapshot) => (
         <div
           {...provided.droppableProps}

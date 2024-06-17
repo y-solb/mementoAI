@@ -1,5 +1,5 @@
-import { Draggable } from 'react-beautiful-dnd';
 import StrictDroppable from './StrictDroppable';
+import Item from './Item';
 
 const Column = ({ columnId, items, isDropDisabled }) => {
   return (
@@ -10,21 +10,7 @@ const Column = ({ columnId, items, isDropDisabled }) => {
           ref={provided.innerRef}
           style={getListStyle(snapshot.isDraggingOver)}>
           {items.map((item, index) => (
-            <Draggable key={item.id} draggableId={item.id} index={index}>
-              {(provided, snapshot) => (
-                <div
-                  ref={provided.innerRef}
-                  {...provided.draggableProps}
-                  {...provided.dragHandleProps}
-                  style={getItemStyle(
-                    snapshot.isDragging,
-                    provided.draggableProps.style,
-                    isDropDisabled
-                  )}>
-                  {item.content}
-                </div>
-              )}
-            </Draggable>
+            <Item key={item.id} index={index} item={item} isDropDisabled={isDropDisabled} />
           ))}
           {provided.placeholder}
         </div>
@@ -34,14 +20,6 @@ const Column = ({ columnId, items, isDropDisabled }) => {
 };
 
 const GRID = 8;
-
-const getItemStyle = (isDragging, draggableStyle, isDisabledDrop) => ({
-  userSelect: 'none',
-  padding: GRID * 2,
-  margin: `0 0 ${GRID}px 0`,
-  background: isDragging ? (isDisabledDrop ? 'red' : 'lightgreen') : 'grey',
-  ...draggableStyle
-});
 
 const getListStyle = (isDraggingOver) => ({
   background: isDraggingOver ? 'lightblue' : 'lightgrey',

@@ -23,6 +23,9 @@ module.exports = {
       }
     ]
   },
+  resolve: {
+    extensions: ['.js', '.jsx'] // 확장자 설정 추가, 확장자 없이 import 할 수 있도록
+  },
   plugins: [
     new HtmlWebpackPlugin({
       template: 'index.html'

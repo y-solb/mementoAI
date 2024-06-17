@@ -1,5 +1,5 @@
 import { Draggable } from 'react-beautiful-dnd';
-import StrictDroppable from './StrictDroppable.jsx';
+import StrictDroppable from './StrictDroppable';
 
 const Column = ({ items }) => {
   return (

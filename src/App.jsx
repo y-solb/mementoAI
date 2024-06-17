@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import { DragDropContext } from 'react-beautiful-dnd';
-import Column from './components/Column.jsx';
+import Column from './components/Column';
 
 function App() {
   const getItems = (count) =>

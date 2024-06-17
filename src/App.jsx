@@ -30,10 +30,11 @@ function App() {
     (update) => {
       const { destination, source, draggableId } = update;
       if (!destination) return;
+
+      const nextItem = entities.columns[destination.droppableId][destination.index];
       if (
         (source.droppableId === 'column-1' && destination.droppableId === 'column-3') ||
-        (isEven(draggableId) &&
-          isEven(entities.columns[destination.droppableId][destination.index].id))
+        (nextItem && isEven(draggableId) && isEven(nextItem.id))
       ) {
         setIsDropDisabled(true);
         return;
@@ -47,9 +48,7 @@ function App() {
   const onDragEnd = useCallback(
     (result) => {
       const { source, destination, draggableId } = result;
-      if (!destination) {
-        return;
-      }
+      if (!destination) return;
 
       // 첫 번째 칼럼에서 세 번째 칼럼으로는 아이템 이동이 불가능해야 합니다.
       if (source.droppableId === 'column-1' && destination.droppableId === 'column-3') {
@@ -57,10 +56,8 @@ function App() {
       }
 
       // 짝수 아이템은 다른 짝수 아이템 앞으로 이동할 수 없습니다.
-      if (
-        isEven(draggableId) &&
-        isEven(entities.columns[destination.droppableId][destination.index].id)
-      ) {
+      const nextItem = entities.columns[destination.droppableId][destination.index];
+      if (nextItem && isEven(draggableId) && isEven(nextItem.id)) {
         return;
       }
 

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Droppable, Draggable } from "react-beautiful-dnd";
+import { useState, useEffect } from 'react';
+import { Droppable, Draggable } from 'react-beautiful-dnd';
 
 const StrictModeDroppable = ({ items }) => {
   const [enabled, setEnabled] = useState(false);
@@ -23,8 +23,7 @@ const StrictModeDroppable = ({ items }) => {
         <div
           {...provided.droppableProps}
           ref={provided.innerRef}
-          style={getListStyle(snapshot.isDraggingOver)}
-        >
+          style={getListStyle(snapshot.isDraggingOver)}>
           {items.map((item, index) => (
             <Draggable key={item.id} draggableId={item.id} index={index}>
               {(provided, snapshot) => (
@@ -32,11 +31,7 @@ const StrictModeDroppable = ({ items }) => {
                   ref={provided.innerRef}
                   {...provided.draggableProps}
                   {...provided.dragHandleProps}
-                  style={getItemStyle(
-                    snapshot.isDragging,
-                    provided.draggableProps.style
-                  )}
-                >
+                  style={getItemStyle(snapshot.isDragging, provided.draggableProps.style)}>
                   {item.content}
                 </div>
               )}
@@ -52,17 +47,17 @@ const StrictModeDroppable = ({ items }) => {
 const GRID = 8;
 
 const getItemStyle = (isDragging, draggableStyle) => ({
-  userSelect: "none",
+  userSelect: 'none',
   padding: GRID * 2,
   margin: `0 0 ${GRID}px 0`,
-  background: isDragging ? "lightgreen" : "grey",
-  ...draggableStyle,
+  background: isDragging ? 'lightgreen' : 'grey',
+  ...draggableStyle
 });
 
 const getListStyle = (isDraggingOver) => ({
-  background: isDraggingOver ? "lightblue" : "lightgrey",
+  background: isDraggingOver ? 'lightblue' : 'lightgrey',
   padding: GRID,
-  width: 250,
+  width: 250
 });
 
 export default StrictModeDroppable;

@@ -1,12 +1,12 @@
-import React, { useState, useCallback } from "react";
-import { DragDropContext } from "react-beautiful-dnd";
-import StrictModeDroppable from "./components/StrictModeDroppable.jsx";
+import { useState, useCallback } from 'react';
+import { DragDropContext } from 'react-beautiful-dnd';
+import StrictModeDroppable from './components/StrictModeDroppable.jsx';
 
 function App() {
   const getItems = (count) =>
     Array.from({ length: count }, (v, k) => k).map((k) => ({
       id: `item-${k}`,
-      content: `item ${k}`,
+      content: `item ${k}`
     }));
 
   const [items, setItems] = useState(getItems(10));
@@ -24,11 +24,7 @@ function App() {
         return;
       }
 
-      const newItems = reorder(
-        items,
-        result.source.index,
-        result.destination.index
-      );
+      const newItems = reorder(items, result.source.index, result.destination.index);
 
       setItems(newItems);
     },

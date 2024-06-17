@@ -19,20 +19,48 @@ const initialData = {
 };
 
 function App() {
+  const [isDropDisabled, setIsDropDisabled] = useState(false);
   const [entities, setEntities] = useState(initialData);
 
-  const reorder = (list, startIndex, endIndex) => {
-    const result = Array.from(list);
-    const [removed] = result.splice(startIndex, 1);
-    result.splice(endIndex, 0, removed);
-    return result;
-  };
+  const onDragStart = useCallback(() => {
+    setIsDropDisabled(false);
+  }, []);
+
+  const onDragUpdate = useCallback(
+    (update) => {
+      const { destination, source, draggableId } = update;
+      if (!destination) return;
+      if (
+        (source.droppableId === 'column-1' && destination.droppableId === 'column-3') ||
+        (isEven(draggableId) &&
+          isEven(entities.columns[destination.droppableId][destination.index].id))
+      ) {
+        setIsDropDisabled(true);
+        return;
+      }
+
+      setIsDropDisabled(false);
+    },
+    [entities.columns]
+  );
 
   const onDragEnd = useCallback(
     (result) => {
-      const { source, destination } = result;
-
+      const { source, destination, draggableId } = result;
       if (!destination) {
+        return;
+      }
+
+      // 첫 번째 칼럼에서 세 번째 칼럼으로는 아이템 이동이 불가능해야 합니다.
+      if (source.droppableId === 'column-1' && destination.droppableId === 'column-3') {
+        return;
+      }
+
+      // 짝수 아이템은 다른 짝수 아이템 앞으로 이동할 수 없습니다.
+      if (
+        isEven(draggableId) &&
+        isEven(entities.columns[destination.droppableId][destination.index].id)
+      ) {
         return;
       }
 
@@ -65,14 +93,30 @@ function App() {
   );
 
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
+    <DragDropContext onDragUpdate={onDragUpdate} onDragEnd={onDragEnd} onDragStart={onDragStart}>
       <div style={{ display: 'flex', gap: '20px' }}>
         {entities.columnOrder.map((columnId) => (
-          <Column key={columnId} columnId={columnId} items={entities.columns[columnId]} />
+          <Column
+            key={columnId}
+            columnId={columnId}
+            items={entities.columns[columnId]}
+            isDropDisabled={isDropDisabled}
+          />
         ))}
       </div>
     </DragDropContext>
   );
 }
+
+const isEven = (str) => {
+  return Number(str.replace('item-', '')) % 2 === 0;
+};
+
+const reorder = (list, startIndex, endIndex) => {
+  const result = Array.from(list);
+  const [removed] = result.splice(startIndex, 1);
+  result.splice(endIndex, 0, removed);
+  return result;
+};
 
 export default App;

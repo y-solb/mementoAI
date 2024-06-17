@@ -1,7 +1,7 @@
 import { Draggable } from 'react-beautiful-dnd';
 import StrictDroppable from './StrictDroppable';
 
-const Column = ({ columnId, items }) => {
+const Column = ({ columnId, items, isDropDisabled }) => {
   return (
     <StrictDroppable droppableId={columnId}>
       {(provided, snapshot) => (
@@ -16,7 +16,11 @@ const Column = ({ columnId, items }) => {
                   ref={provided.innerRef}
                   {...provided.draggableProps}
                   {...provided.dragHandleProps}
-                  style={getItemStyle(snapshot.isDragging, provided.draggableProps.style)}>
+                  style={getItemStyle(
+                    snapshot.isDragging,
+                    provided.draggableProps.style,
+                    isDropDisabled
+                  )}>
                   {item.content}
                 </div>
               )}
@@ -31,11 +35,11 @@ const Column = ({ columnId, items }) => {
 
 const GRID = 8;
 
-const getItemStyle = (isDragging, draggableStyle) => ({
+const getItemStyle = (isDragging, draggableStyle, isDisabledDrop) => ({
   userSelect: 'none',
   padding: GRID * 2,
   margin: `0 0 ${GRID}px 0`,
-  background: isDragging ? 'lightgreen' : 'grey',
+  background: isDragging ? (isDisabledDrop ? 'red' : 'lightgreen') : 'grey',
   ...draggableStyle
 });
 

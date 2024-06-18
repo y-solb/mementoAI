@@ -1,8 +1,10 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const path = require('path');
 
 module.exports = {
   entry: './src/index.jsx', // 진입 파일
   output: {
+    path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js' // 빌드 파일
   },
   module: {

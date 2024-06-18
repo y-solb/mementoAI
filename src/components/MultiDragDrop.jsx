@@ -1,12 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
 import { DragDropContext } from 'react-beautiful-dnd';
 import Column from './Column';
-import { isDragAllowed, mutliDragAwareReorder, multiSelect } from '../utils/dnd';
+import { mutliDragAwareReorder, multiSelect } from '../utils/dnd';
 import { initialData } from '../data/dnd';
 import styled from 'styled-components';
-
-const getItems = (entities, columnId) =>
-  entities.columns[columnId].itemIds?.map((itemId) => entities.items[itemId]);
 
 const DragDropWrapper = styled.div`
   display: flex;
@@ -60,6 +57,22 @@ const MultiDragDrop = () => {
   const resetSelectedItems = () => {
     setSeletedItemIds([]);
   };
+
+  // 첫 번째 칼럼에서 세 번째 칼럼으로는 아이템 이동이 불가능해야 합니다.
+  // 짝수 아이템은 다른 짝수 아이템 앞으로 이동할 수 없습니다.
+  const isDragDisallowed = useCallback(
+    (source, destination, draggableId) => {
+      const nextIndex =
+        destination.droppableId === source.droppableId ? destination.index + 1 : destination.index;
+      const nextItemId = entities.columns[destination.droppableId].itemIds[nextIndex];
+
+      return (
+        (source.droppableId === 'column-1' && destination.droppableId === 'column-3') ||
+        (nextItemId && isEven(draggableId) && isEven(nextItemId))
+      );
+    },
+    [entities.columns]
+  );
 
   const toggleSelection = (itemId) => {
     const wasSelected = selecetedItemIds.includes(itemId);
@@ -126,15 +139,14 @@ const MultiDragDrop = () => {
       const { destination, source, draggableId } = update;
       if (!destination) return;
 
-      const nextItemId = entities.columns[destination.droppableId].itemIds[destination.index];
-      if (isDragAllowed(source.droppableId, destination.droppableId, draggableId, nextItemId)) {
+      if (isDragDisallowed(source, destination, draggableId)) {
         setIsDropDisabled(true);
         return;
       }
 
       setIsDropDisabled(false);
     },
-    [entities]
+    [isDragDisallowed]
   );
 
   const handleDragEnd = useCallback(
@@ -145,8 +157,10 @@ const MultiDragDrop = () => {
         return;
       }
 
-      const nextItemId = entities.columns[destination.droppableId].itemIds[destination.index];
-      if (isDragAllowed(source.droppableId, destination.droppableId, draggableId, nextItemId)) {
+      // const nextIndex =
+      //   destination.droppableId === source.droppableId ? destination.index + 1 : destination.index;
+      // const nextItemId = entities.columns[destination.droppableId].itemIds[nextIndex];
+      if (isDragDisallowed(source, destination, draggableId)) {
         return;
       }
 
@@ -161,7 +175,7 @@ const MultiDragDrop = () => {
       setSeletedItemIds(processed.selecetedItemIds);
       setDraggingId(null);
     },
-    [entities, selecetedItemIds]
+    [entities, isDragDisallowed, selecetedItemIds]
   );
 
   return (
@@ -186,6 +200,13 @@ const MultiDragDrop = () => {
       </DragDropWrapper>
     </DragDropContext>
   );
+};
+
+const getItems = (entities, columnId) =>
+  entities.columns[columnId].itemIds?.map((itemId) => entities.items[itemId]);
+
+const isEven = (str) => {
+  return Number(str.replace('item-', '')) % 2 === 0;
 };
 
 export default MultiDragDrop;

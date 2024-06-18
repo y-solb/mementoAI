@@ -4,24 +4,6 @@ const withNewItemIds = (column, itemIds) => ({
   itemIds
 });
 
-const isEven = (str) => {
-  return Number(str.replace('item-', '')) % 2 === 0;
-};
-
-// 첫 번째 칼럼에서 세 번째 칼럼으로는 아이템 이동이 불가능해야 합니다.
-// 짝수 아이템은 다른 짝수 아이템 앞으로 이동할 수 없습니다.
-export const isDragAllowed = (
-  sourceDroppableId,
-  destinationDroppableId,
-  draggableId,
-  nextItemId
-) => {
-  return (
-    (sourceDroppableId === 'column-1' && destinationDroppableId === 'column-3') ||
-    (nextItemId && isEven(draggableId) && isEven(nextItemId))
-  );
-};
-
 export const mutliDragAwareReorder = (args) => {
   if (args.selecetedItemIds.length > 1) {
     return reorderMultiDrag(args);

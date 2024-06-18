@@ -1,6 +1,13 @@
 import StrictDroppable from './StrictDroppable';
 import Item from './Item';
 import { GRID } from '../data/dnd';
+import styled from 'styled-components';
+
+const ColumnWrapper = styled.div`
+  background: ${({ $isDraggingOver }) => ($isDraggingOver ? '#8AA2C3' : 'lightgrey')};
+  padding: ${GRID}px;
+  width: 250px;
+`;
 
 const Column = ({
   column,
@@ -15,10 +22,10 @@ const Column = ({
   return (
     <StrictDroppable droppableId={column.id}>
       {(provided, snapshot) => (
-        <div
+        <ColumnWrapper
           {...provided.droppableProps}
           ref={provided.innerRef}
-          style={getListStyle(snapshot.isDraggingOver)}>
+          $isDraggingOver={snapshot.isDraggingOver}>
           {items.map((item, index) => {
             const isSelected = selecetedItemIds.some(
               (selectedItemId) => selectedItemId === item.id
@@ -40,16 +47,10 @@ const Column = ({
             );
           })}
           {provided.placeholder}
-        </div>
+        </ColumnWrapper>
       )}
     </StrictDroppable>
   );
 };
-
-const getListStyle = (isDraggingOver) => ({
-  background: isDraggingOver ? 'lightblue' : 'lightgrey',
-  padding: GRID,
-  width: 250
-});
 
 export default Column;

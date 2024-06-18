@@ -1,5 +1,6 @@
 import { Draggable } from 'react-beautiful-dnd';
 import { GRID } from '../data/dnd';
+import styled from 'styled-components';
 
 const primaryButton = 0;
 
@@ -10,6 +11,57 @@ const keyCodes = {
   arrowUp: 38,
   tab: 9
 };
+
+const getBackgroundColor = ({ $isDropDisabled, $isDragging, $isSelected }) => {
+  if ($isDragging) {
+    if ($isDropDisabled) {
+      return '#FF6347';
+    }
+  }
+
+  if ($isSelected) {
+    return '#cde5f4';
+  }
+
+  return 'white';
+};
+
+const getColor = ({ $isGhosting }) => {
+  if ($isGhosting) {
+    return 'grey';
+  }
+
+  return 'black';
+};
+
+const ItemWrapper = styled.div`
+  position: relative;
+  background: ${(props) => getBackgroundColor(props)};
+  color: ${(props) => getColor(props)};
+  opacity: ${({ $isGhosting }) => ($isGhosting ? 0.8 : 1)};
+  user-select: none;
+  padding: ${GRID * 2}px;
+  margin-bottom: ${GRID}px;
+  border-radius: 8px;
+  &:last-child {
+    margin-bottom: 0;
+  }
+`;
+
+const Count = styled.span`
+  position: absolute;
+  right: -10px;
+  top: -10px;
+  border-radius: 100%;
+  height: 24px;
+  width: 24px;
+  font-weight: 600;
+  background: darkgray;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
 
 const Item = ({
   index,
@@ -84,35 +136,23 @@ const Item = ({
   return (
     <Draggable draggableId={item.id} index={index}>
       {(provided, snapshot) => (
-        <div
+        <ItemWrapper
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
-          style={getItemStyle(
-            snapshot.isDragging,
-            provided.draggableProps.style,
-            isSelected,
-            isGhosting,
-            isDropDisabled
-          )}
           onClick={handleClick}
           onTouchEnd={handleTouchEnd}
-          onKeyDown={(event) => handleKeyDown(event, snapshot)}>
-          {item.content}
-          {snapshot.isDragging && selectionCount > 1 ? <span>{selectionCount}</span> : null}
-        </div>
+          onKeyDown={(event) => handleKeyDown(event, snapshot)}
+          $isDragging={snapshot.isDragging}
+          $isSelected={isSelected}
+          $isGhosting={isGhosting}
+          $isDropDisabled={isDropDisabled}>
+          <span>{item.content}</span>
+          {snapshot.isDragging && selectionCount > 1 ? <Count>{selectionCount}</Count> : null}
+        </ItemWrapper>
       )}
     </Draggable>
   );
 };
-
-const getItemStyle = (isDragging, draggableStyle, isSelected, isGhosting, isDropDisabled) => ({
-  background: isDragging ? (isDropDisabled ? 'red' : 'lightgreen') : 'grey',
-  color: isGhosting ? 'darkgrey' : isSelected ? 'green' : 'pink',
-  userSelect: 'none',
-  padding: GRID * 2,
-  margin: `0 0 ${GRID}px 0`,
-  ...draggableStyle
-});
 
 export default Item;

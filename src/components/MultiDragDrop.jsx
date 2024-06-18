@@ -3,9 +3,15 @@ import { DragDropContext } from 'react-beautiful-dnd';
 import Column from './Column';
 import { isDragAllowed, mutliDragAwareReorder, multiSelect } from '../utils/dnd';
 import { initialData } from '../data/dnd';
+import styled from 'styled-components';
 
 const getItems = (entities, columnId) =>
   entities.columns[columnId].itemIds?.map((itemId) => entities.items[itemId]);
+
+const DragDropWrapper = styled.div`
+  display: flex;
+  gap: 20px;
+`;
 
 const MultiDragDrop = () => {
   const [isDropDisabled, setIsDropDisabled] = useState(false);
@@ -163,7 +169,7 @@ const MultiDragDrop = () => {
       onDragStart={handleDragStart}
       onDragUpdate={handleDragUpdate}
       onDragEnd={handleDragEnd}>
-      <div style={{ display: 'flex', gap: '20px' }}>
+      <DragDropWrapper>
         {entities.columnOrder.map((columnId) => (
           <Column
             key={columnId}
@@ -177,7 +183,7 @@ const MultiDragDrop = () => {
             multiSelectTo={multiSelectTo}
           />
         ))}
-      </div>
+      </DragDropWrapper>
     </DragDropContext>
   );
 };

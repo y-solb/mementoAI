@@ -4,6 +4,15 @@ const withNewItemIds = (column, itemIds) => ({
   itemIds
 });
 
+/**
+ * 드래그가 끝났을 때 다중 드래그인지 단일 드래그인지에 따라 재정렬하는 함수
+ * @param {Object} args
+ *   @property {Array} selectedItemIds - 선택된 요소들의 ids
+ *   @property {Object} entities
+ *   @property {Object} source - 드래그가 시작된 위치 정보
+ *   @property {Object} destination - 드래그가 끝난 위치 정보
+ * @returns 재정렬된 data 반환
+ */
 export const mutliDragAwareReorder = (args) => {
   if (args.selecetedItemIds.length > 1) {
     return reorderMultiDrag(args);
@@ -56,29 +65,6 @@ const reorderMultiDrag = ({ entities, selecetedItemIds, source, destination }) =
   // and know original ordering
 
   const orderedSelectedItemIds = [...selecetedItemIds];
-
-  // orderedSelectedItemIds.sort((a, b) => {
-  //   // moving the dragged item to the top of the list
-  //   if (a === dragged) {
-  //     return -1;
-  //   }
-  //   if (b === dragged) {
-  //     return 1;
-  //   }
-
-  //   // sorting by their natural indexes
-  //   const columnForA = getHomeColumn(entities, a);
-  //   const indexOfA = columnForA.itemIds.indexOf(a);
-  //   const columnForB = getHomeColumn(entities, b);
-  //   const indexOfB = columnForB.itemIds.indexOf(b);
-
-  //   if (indexOfA !== indexOfB) {
-  //     return indexOfA - indexOfB;
-  //   }
-
-  //   // sorting by their order in the selectedItemIds list
-  //   return -1;
-  // });
 
   // we need to remove all of the selected items from their columns
   const withRemovedItems = entities.columnOrder.reduce((previous, columnId) => {
@@ -172,6 +158,13 @@ const reorderSingleDrag = ({ entities, selecetedItemIds, source, destination }) 
   };
 };
 
+/**
+ * shift키로 다중 선택 시 선택된 요소들을 반환하는 함수
+ * @param {Object} entities
+ * @param {Array} selecetedItemIds 현재 선택된 요소들의 ids
+ * @param {*} newItemId 새로 선택된 요소 id
+ * @returns 새로 선택된 요소들의 ids 반환
+ */
 export const multiSelect = (entities, selecetedItemIds, newItemId) => {
   if (!selecetedItemIds.length) {
     return [newItemId];

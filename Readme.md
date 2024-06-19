@@ -1,3 +1,44 @@
+# 프론트엔드 개발 과제 제출
+
+## 소개
+
+배포 링크 : https://y-solb.github.io/mementoAI
+
+![ezgif com-video-to-gif-converter](https://github.com/y-solb/mementoAI/assets/59462108/c520e6b9-5e4d-4258-a18f-48c41af9caa3)
+
+## 기술 스택
+
+- React
+- Javascript
+- Styled-components
+- Eslint / Prettier
+
+## 구현 사항
+
+- Webpack 적용
+- 칼럼 확장
+- 드래그 제약 조건 적용
+- 멀티 드래그 기능 구현
+- 사용자 경험 및 인터페이스 디자인
+
+  - 이동할 수 없는 지점으로 아이템을 드래그할 경우 아이템의 배경색을 붉은색으로 변경했습니다.
+  - 선택된 요소는 파란 배경으로 나타냈습니다.
+  - 다중 요소를 드래그할 경우 아이템 상단에 다중요소의 개수를 나타냈습니다.
+  - `Escape`키를 누르거나 바깥 영역 클릭 또는 터치 시 요소 선택이 취소됩니다.
+  - `ctrl`키를 누른 상태에서 각각의 item을 다중 선택할 수 있도록 구현했습니다.
+  - `shift`키를 누른 상태에서 처음 선택한 항목과 마지막 선택한 항목 사이의 모든 항목을 선택할 수 있도록 구현했습니다.
+
+**이슈**
+
+[react18과 `react-beautiful-dnd` 라이브러리 간에 호환성 문제](https://github.com/atlassian/react-beautiful-dnd/issues/2399#issuecomment-1167427762)를 해결하기 위해 해당 자료를 참고해 StrictDroppable component를 구현했습니다.
+
+## 설치 및 시작
+
+```
+npm install
+npm run dev
+```
+
 # 프론트엔드 개발 과제
 
 이 프로젝트는 Webpack 설정을 직접 구성하고, 주어진 요구사항에 따라 동작하는 드래그 앤 드롭 기능을 구현하는 과제입니다. `react-beautiful-dnd` 라이브러리를 사용하여, 지정된 드래그 제약 조건을 만족하는 애플리케이션을 만들어야 합니다. 제공되는 최소 기능의 초기 파일을 기반으로 시작하여 아래의 과제들을 수행해야 합니다.
@@ -44,3 +85,7 @@
 - 드래그 앤 드롭 기능의 정확한 구현
 - 코드의 가독성 및 구조화
 - 사용자 경험 및 인터페이스 디자인
+
+---
+
+https://bepyan.github.io/blog/dnd-master/6-react-beautiful-dnd#%EC%B5%9C%EC%A2%85-%EC%BD%94%EB%93%9C

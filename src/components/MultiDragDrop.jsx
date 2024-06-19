@@ -157,10 +157,8 @@ const MultiDragDrop = () => {
         return;
       }
 
-      // const nextIndex =
-      //   destination.droppableId === source.droppableId ? destination.index + 1 : destination.index;
-      // const nextItemId = entities.columns[destination.droppableId].itemIds[nextIndex];
       if (isDragDisallowed(source, destination, draggableId)) {
+        setDraggingId(null);
         return;
       }
 

@@ -85,7 +85,3 @@ npm run dev
 - 드래그 앤 드롭 기능의 정확한 구현
 - 코드의 가독성 및 구조화
 - 사용자 경험 및 인터페이스 디자인
-
----
-
-https://bepyan.github.io/blog/dnd-master/6-react-beautiful-dnd#%EC%B5%9C%EC%A2%85-%EC%BD%94%EB%93%9C

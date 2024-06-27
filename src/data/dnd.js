@@ -6,12 +6,12 @@ const items = Array.from({ length: 20 }, (v, k) => k).map((k) => ({
 const itemMap = items.reduce((previous, current) => {
   previous[current.id] = current;
   return previous;
-}, {});
+}, {}); // key(item.id) : value(item)
 
 const column1 = {
   id: 'column-1',
   title: 'column 1',
-  itemIds: items.map((item) => item.id)
+  itemIds: items.map((item) => item.id) // id들만 추출
 };
 
 const column2 = {

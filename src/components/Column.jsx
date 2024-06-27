@@ -9,6 +9,8 @@ const ColumnWrapper = styled.div`
   width: 250px;
 `;
 
+// provided: 객체는 드롭 가능한 영역(Droppable)을 설정
+// snapshot: 현재 드래그 중인 항목이 이 드롭 영역 위에 있는지를 나타내는 boolean 값
 const Column = ({
   column,
   items,
@@ -27,9 +29,11 @@ const Column = ({
           ref={provided.innerRef}
           $isDraggingOver={snapshot.isDraggingOver}>
           {items.map((item, index) => {
+            // 선택된 요소인지
             const isSelected = selecetedItemIds.some(
               (selectedItemId) => selectedItemId === item.id
             );
+            // 선택된 요소이나 마지막으로 선택된 요소가 아닌 경우 Ghost으로 흐리게 처리
             const isGhosting = isSelected && Boolean(draggingId) && draggingId !== item.id;
             return (
               <Item

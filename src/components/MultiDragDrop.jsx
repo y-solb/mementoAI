@@ -11,13 +11,14 @@ const DragDropWrapper = styled.div`
 `;
 
 const MultiDragDrop = () => {
-  const [isDropDisabled, setIsDropDisabled] = useState(false);
+  const [isDropDisabled, setIsDropDisabled] = useState(false); // drop이 불가능한지
   const [entities, setEntities] = useState(initialData);
-  const [selecetedItemIds, setSeletedItemIds] = useState([]);
-  const [draggingId, setDraggingId] = useState(null);
+  const [selecetedItemIds, setSeletedItemIds] = useState([]); // 선택된 ids
+  const [draggingId, setDraggingId] = useState(null); // 최종 선택된 id
 
   const handleWindowClick = useCallback((event) => {
     if (event.defaultPrevented) {
+      // event.preventDefault()로 기본 동작이 취소된 경우 return, 이벤트가 중복 처리 방지
       return;
     }
 
@@ -63,7 +64,7 @@ const MultiDragDrop = () => {
   const isDragDisallowed = useCallback(
     (source, destination, draggableId) => {
       const nextIndex =
-        destination.droppableId === source.droppableId ? destination.index + 1 : destination.index;
+        destination.droppableId === source.droppableId ? destination.index + 1 : destination.index; // 같은 열에 있다면 index+1/index, 다음 아이템의 index
       const nextItemId = entities.columns[destination.droppableId].itemIds[nextIndex];
 
       return (
@@ -74,27 +75,16 @@ const MultiDragDrop = () => {
     [entities.columns]
   );
 
+  // 단일 선택
   const toggleSelection = (itemId) => {
-    const wasSelected = selecetedItemIds.includes(itemId);
+    const wasSelected = selecetedItemIds.includes(itemId); // 이전에 선택되었는지
 
-    const newItemIds = (() => {
-      // 이전에 선택되지 않음
-      if (!wasSelected) {
-        return [itemId];
-      }
-
-      // 선택 item 변경
-      if (selecetedItemIds.length > 1) {
-        return [itemId];
-      }
-
-      // 선택 해제
-      return [];
-    })();
-
+    // 이전에 선택되지 않았거나 선택된 아이템들이 있다면 대체
+    const newItemIds = !wasSelected || selecetedItemIds.length > 1 ? [itemId] : [];
     setSeletedItemIds(newItemIds);
   };
 
+  // ctrl키로 선택 시
   const toggleSelectionInGroup = (itemId) => {
     const index = selecetedItemIds.indexOf(itemId);
 
@@ -105,13 +95,13 @@ const MultiDragDrop = () => {
     }
 
     // 기존에 선택되어 제거
-    const shallow = [...selecetedItemIds];
-    shallow.splice(index, 1);
-    setSeletedItemIds(shallow);
+    const filteredItems = selecetedItemIds.filter((id) => id !== itemId);
+    setSeletedItemIds(filteredItems);
   };
 
+  // shift키로 선택 시
   const multiSelectTo = (newItemId) => {
-    const updated = multiSelect(entities, selecetedItemIds, newItemId);
+    const updated = multiSelect(entities, selecetedItemIds, newItemId); // 선택된 ids
 
     if (updated == null) {
       return;
@@ -119,11 +109,15 @@ const MultiDragDrop = () => {
     setSeletedItemIds(updated);
   };
 
+  // draggableId: 선택된 id
+  // source: 시작점
+  // destination: 목적지
   const handleDragStart = useCallback(
     (start) => {
       const { draggableId } = start;
       const selected = selecetedItemIds.find((itemId) => itemId === draggableId);
 
+      // 여러 개 선택 후 다른 거 하나 이동 시
       if (!selected) {
         resetSelectedItems();
       }
@@ -139,11 +133,13 @@ const MultiDragDrop = () => {
       const { destination, source, draggableId } = update;
       if (!destination) return;
 
+      // 조건에 부합하지 않는다면 true
       if (isDragDisallowed(source, destination, draggableId)) {
         setIsDropDisabled(true);
         return;
       }
 
+      // isDropDisabled 초기화
       setIsDropDisabled(false);
     },
     [isDragDisallowed]
@@ -168,9 +164,8 @@ const MultiDragDrop = () => {
         source,
         destination
       });
-
       setEntities(processed.entities);
-      setSeletedItemIds(processed.selecetedItemIds);
+      // setSeletedItemIds(processed.selecetedItemIds);
       setDraggingId(null);
     },
     [entities, isDragDisallowed, selecetedItemIds]
@@ -200,9 +195,11 @@ const MultiDragDrop = () => {
   );
 };
 
+// [ {id: 'item-0', content: 'item 0'} ,{id: 'item-1', content: 'item 1'}, ... ]
 const getItems = (entities, columnId) =>
   entities.columns[columnId].itemIds?.map((itemId) => entities.items[itemId]);
 
+// 짝수인지
 const isEven = (str) => {
   return Number(str.replace('item-', '')) % 2 === 0;
 };

@@ -74,11 +74,13 @@ const Item = ({
   multiSelectTo,
   isDropDisabled
 }) => {
+  // 보충 작업이 필요..
   const handleKeyDown = (event, snapshot) => {
     if (event.defaultPrevented) {
       return;
     }
 
+    // 드래그 중일 때는 키보드 이벤트 무시
     if (snapshot.isDragging) {
       return;
     }
@@ -96,6 +98,7 @@ const Item = ({
       return;
     }
 
+    // 주클릭(왼쪽 클릭)이 아니라면 리턴
     if (event.button !== primaryButton) {
       return;
     }
@@ -108,15 +111,16 @@ const Item = ({
     if (event.defaultPrevented) {
       return;
     }
-
     event.preventDefault();
     toggleSelectionInGroup(item.id);
   };
 
+  // ctrl키가 눌렸는지
   const wasToggleInSelectionGroupKeyUsed = (event) => {
     return navigator.userAgent.includes('Mac') ? event.metaKey : event.ctrlKey;
   };
 
+  // shift키가 눌렸는지
   const wasMultiSelectKeyUsed = (event) => event.shiftKey;
 
   const performAction = (event) => {
